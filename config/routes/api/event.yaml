@@ -1,0 +1,24 @@
+index:
+  path: /event
+  controller: App\Controller\Api\EventRestController::index
+  methods:   GET|HEAD
+
+show:
+  path: /event/{id}
+  controller: App\Controller\Api\EventRestController::show
+  methods: GET|HEAD
+
+store:
+  path: /event
+  controller: App\Controller\Api\EventRestController::store
+  methods: POST
+
+update:
+  path: /event/{id}
+  controller: App\Controller\Api\EventRestController::update
+  methods: PUT|PATCH
+
+delete:
+  path: /event/{id}
+  controller: App\Controller\Api\EventRestController::delete
+  methods:  DELETE

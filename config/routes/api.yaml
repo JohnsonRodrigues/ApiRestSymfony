@@ -1,0 +1,4 @@
+api_event:
+  resource: 'api/event.yaml'
+  prefix: /api
+  name_prefix: api_event_
