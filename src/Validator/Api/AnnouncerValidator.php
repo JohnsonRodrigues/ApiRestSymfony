@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Validator\Api;
 
-use App\Validator\Validation\EventExist;
+use App\Validator\Validation\LectureExist;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class LectureValidator
+class AnnouncerValidator
 {
     private array $content;
     private ValidatorInterface $validator;
@@ -42,12 +42,8 @@ class LectureValidator
     private function rules(): Collection
     {
         return new Collection([
-            'title' => new Assert\Length(['min' => 5, 'max' => 150]),
-            'description' => new Assert\NotBlank(),
-            'date' => new Assert\Date(),
-            'start_time' => new Assert\Time(),
-            'end_time' => new Assert\Time(),
-            'event_id' => [new Assert\Required(), new Assert\NotBlank(), new Assert\Ulid(), new EventExist()],
+            'name' => new Assert\Length(['min' => 5, 'max' => 150]),
+            'lecture_id' => [new Assert\Required(), new Assert\NotBlank(), new Assert\Ulid(), new LectureExist()],
         ]);
     }
 }

@@ -1,0 +1,24 @@
+index:
+  path: /announcer
+  controller: App\Controller\Api\AnnouncerRestController::index
+  methods:   GET|HEAD
+
+show:
+  path: /announcer/{id}
+  controller: App\Controller\Api\AnnouncerRestController::show
+  methods: GET|HEAD
+
+store:
+  path: /announcer
+  controller: App\Controller\Api\AnnouncerRestController::store
+  methods: POST
+
+update:
+  path: /announcer/{id}
+  controller: App\Controller\Api\AnnouncerRestController::update
+  methods: PUT|PATCH
+
+delete:
+  path: /announcer/{id}
+  controller: App\Controller\Api\AnnouncerRestController::delete
+  methods:  DELETE

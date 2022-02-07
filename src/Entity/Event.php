@@ -205,7 +205,7 @@ class Event implements JsonSerializable
             'description' => $this->getDescription(),
             'start' => $this->getStart()->format('d/m/Y h:m:s'),
             'end' => $this->getEnd()->format('d/m/Y h:m:s'),
-            'statu' => $this->getStatus(),
+            'status' => $this->getStatus(),
             'created_at' => $this->getCreatedAt()->format('d/m/Y h:m:s'),
             'updated_at' => $this->getUpdatedAt()->format('d/m/Y h:m:s'),
             'lectures'=>$this->getLectures(),

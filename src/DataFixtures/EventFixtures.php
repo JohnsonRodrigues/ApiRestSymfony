@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class EventFixtures extends Fixture
 {
-    public const QUANTITY = 20;
+    public const QUANTITY = 10;
     public const STATUS = array('Agendado', 'Acontecendo', 'Finalizado', 'Cancelado');
 
     public function load(ObjectManager $manager): void
@@ -24,18 +24,14 @@ class EventFixtures extends Fixture
             $event->setEnd(new DateTimeImmutable('now'));
             $event->setStatus(self::STATUS[array_rand(self::STATUS, 1)]);
 
-
             $lecture = new Lecture();
             $lecture->setTitle("Title " . $i);
             $lecture->setDescription("Description " . $i);
-            $lecture->setAnnouncer("Announcer " . $i);
             $lecture->setDate(new DateTimeImmutable('now'));
             $lecture->setStartTime(new DateTimeImmutable('now'));
             $lecture->setEndTime(new DateTimeImmutable('now'));
             $event->addLecture($lecture);
-
             $this->setReference("event-{$i}", $event);
-
             $manager->persist($event);
         }
         $manager->flush();

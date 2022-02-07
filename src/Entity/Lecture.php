@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\LectureRepository;
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
@@ -67,22 +68,22 @@ class Lecture implements JsonSerializable
      */
     private DateTimeInterface $updatedAt;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private string $announcer;
 
     /**
-     * @return Ulid
+     * @ORM\OneToMany(targetEntity=Announcer::class, mappedBy="lecture",orphanRemoval=true, cascade={"persist"})
      */
+    private Collection $announcers;
+
+    public function __construct()
+    {
+        $this->announcers = new ArrayCollection();
+    }
+
     public function getId(): Ulid
     {
         return $this->id;
     }
 
-    /**
-     * @param Ulid $id
-     */
     public function setId(Ulid $id): void
     {
         $this->id = $id;
@@ -168,15 +169,37 @@ class Lecture implements JsonSerializable
         $this->updatedAt = $updatedAt;
     }
 
-    public function getAnnouncer(): string
+    public function getAnnouncers(): Collection
     {
-        return $this->announcer;
+        return $this->announcers;
     }
 
-    public function setAnnouncer(string $announcer): void
+    public function setAnnouncers($announcers): void
     {
-        $this->announcer = $announcer;
+        $this->announcers = $announcers;
     }
+
+    public function addAnnouncer(Announcer $announcer): self
+    {
+        if (!$this->announcers->contains($announcer)) {
+            $this->announcers[] = $announcer;
+            $announcer->setLecture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnouncer(Announcer $announcer): self
+    {
+        if ($this->announcers->removeElement($announcer)) {
+            if ($announcer->getLecture() === $this) {
+                $announcer->setLecture(null);
+            }
+        }
+
+        return $this;
+    }
+
 
     /**
      * @ORM\PrePersist
@@ -202,7 +225,7 @@ class Lecture implements JsonSerializable
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
-            'announcer' => $this->getAnnouncer(),
+            'announcers' => $this->getAnnouncers(),
             'event_id' => $this->getEvent()->getId(),
             'date' => $this->getDate()->format('d/m/Y h:m:s'),
             'start_time' => $this->getStartTime()->format('h:m:s'),
@@ -211,4 +234,6 @@ class Lecture implements JsonSerializable
             'updated_at' => $this->getUpdatedAt()->format('d/m/Y h:m:s'),
         ];
     }
+
+
 }
