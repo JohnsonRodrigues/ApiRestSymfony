@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Event;
 use App\Repository\EventRepository;
 use DateTime;
+use Symfony\Component\Uid\Ulid;
 
 class EventService
 {
@@ -22,9 +23,9 @@ class EventService
         return $this->eventRepository->findAll();
     }
 
-    public function findById(string $id): Event
+    public function findById(string $id): ?Event
     {
-        return $this->eventRepository->find($id);
+        return $this->eventRepository->find(Ulid::fromString($id));
     }
 
     public function create(array $attributes): ?Event

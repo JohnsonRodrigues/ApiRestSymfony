@@ -7,7 +7,10 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Component\Uid\Ulid;
 
@@ -16,7 +19,7 @@ use Symfony\Component\Uid\Ulid;
  * @ORM\Entity(repositoryClass=EventRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class Event
+class Event implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -61,6 +64,15 @@ class Event
      */
     private DateTimeInterface $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Lecture::class, mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     */
+    private Collection $lectures;
+
+    public function __construct()
+    {
+        $this->lectures = new ArrayCollection();
+    }
 
     /**
      * @ORM\PrePersist
@@ -157,5 +169,46 @@ class Event
     public function setUpdatedAt(DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    public function getLectures(): Collection
+    {
+        return $this->lectures;
+    }
+
+    public function addLecture(Lecture $lecture): self
+    {
+        if (!$this->lectures->contains($lecture)) {
+            $this->lectures[] = $lecture;
+            $lecture->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLecture(Lecture $lecture): self
+    {
+        if ($this->lectures->removeElement($lecture)) {
+            if ($lecture->getEvent() === $this) {
+                $lecture->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'start' => $this->getStart()->format('d/m/Y h:m:s'),
+            'end' => $this->getEnd()->format('d/m/Y h:m:s'),
+            'statu' => $this->getStatus(),
+            'created_at' => $this->getCreatedAt()->format('d/m/Y h:m:s'),
+            'updated_at' => $this->getUpdatedAt()->format('d/m/Y h:m:s'),
+            'lectures'=>$this->getLectures(),
+        ];
     }
 }

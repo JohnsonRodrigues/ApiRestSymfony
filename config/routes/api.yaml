@@ -2,3 +2,8 @@ api_event:
   resource: 'api/event.yaml'
   prefix: /api
   name_prefix: api_event_
+
+api_lecture:
+  resource: 'api/lecture.yaml'
+  prefix: /api
+  name_prefix: api_lecture_
