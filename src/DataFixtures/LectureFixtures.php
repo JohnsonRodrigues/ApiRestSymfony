@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class LectureFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const QUANTITY = 20;
+    public const QUANTITY = 10;
 
     public function load(ObjectManager $manager): void
     {
@@ -19,11 +19,11 @@ class LectureFixtures extends Fixture implements DependentFixtureInterface
             $lecture = new Lecture();
             $lecture->setTitle("Title " . $i);
             $lecture->setDescription("Description " . $i);
-            $lecture->setAnnouncer("Announcer " . $i);
             $lecture->setDate(new DateTimeImmutable('now'));
             $lecture->setStartTime(new DateTimeImmutable('now'));
             $lecture->setEndTime(new DateTimeImmutable('now'));
-            $this->getReference('event-1');
+            $lecture->setEvent($this->getReference('event-1'));
+            $this->setReference("lecture-{$i}", $lecture);
             $manager->persist($lecture);
         }
         $manager->flush();

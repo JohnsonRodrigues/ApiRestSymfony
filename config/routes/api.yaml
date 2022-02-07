@@ -7,3 +7,8 @@ api_lecture:
   resource: 'api/lecture.yaml'
   prefix: /api
   name_prefix: api_lecture_
+
+api_announcer:
+  resource: 'api/announcer.yaml'
+  prefix: /api
+  name_prefix: api_announcer_
