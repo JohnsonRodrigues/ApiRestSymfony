@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\Service\EventService;
-use App\Validator\Api\EventValidator;
+use App\Service\LectureService;
+use App\Validator\Api\LectureValidator;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,14 +13,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
-class EventRestController extends AbstractController
+class LectureRestController extends AbstractController
 {
-    private EventService $eventService;
+    private LectureService $lectureService;
     private ValidatorInterface $validator;
 
-    public function __construct(EventService $eventService, ValidatorInterface $validator)
+    public function __construct(LectureService $lectureService, ValidatorInterface $validator)
     {
-        $this->eventService = $eventService;
+        $this->lectureService = $lectureService;
         $this->validator = $validator;
     }
 
@@ -28,15 +28,15 @@ class EventRestController extends AbstractController
     {
         try {
             return $this->json([
-                'status' => true,
-                'data' => $this->eventService->findAll()
+                'success' => true,
+                'data' => $this->lectureService->findAll()
             ]);
         } catch (Exception $exception) {
             return $this->json([
-                'status' => false,
+                'success' => false,
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
-            ], 400);
+            ]);
         }
     }
 
@@ -44,23 +44,23 @@ class EventRestController extends AbstractController
     {
         try {
             return $this->json([
-                'status' => true,
-                'data' => $this->eventService->findById($id)
+                'success' => true,
+                'data' => $this->lectureService->findById($id)
             ]);
         } catch (Exception $exception) {
             return $this->json([
-                'status' => false,
+                'success' => false,
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
-            ], 400);
+            ]);
         }
     }
 
     public function store(Request $request): JsonResponse
     {
         try {
-            $eventValidator = new EventValidator($request, $this->validator);
-            $errors = $eventValidator->validate();
+            $lectureValidator = new LectureValidator($request, $this->validator);
+            $errors = $lectureValidator->validate();
             if (count($errors) > 0) {
                 return $this->json([
                     'status' => false,
@@ -68,12 +68,12 @@ class EventRestController extends AbstractController
                 ], 422);
             }
             return $this->json([
-                'status' => true,
-                'data' => $this->eventService->create($eventValidator->validated())
+                'success' => true,
+                'data' => $this->lectureService->create($lectureValidator->validated())
             ]);
         } catch (Exception $exception) {
             return $this->json([
-                'status' => false,
+                'success' => false,
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ]);
@@ -83,8 +83,8 @@ class EventRestController extends AbstractController
     public function update(string $id, Request $request): JsonResponse
     {
         try {
-            $eventValidator = new EventValidator($request, $this->validator);
-            $errors = $eventValidator->validate();
+            $lectureValidator = new LectureValidator($request, $this->validator);
+            $errors = $lectureValidator->validate();
             if (count($errors) > 0) {
                 return $this->json([
                     'status' => false,
@@ -92,12 +92,12 @@ class EventRestController extends AbstractController
                 ], 422);
             }
             return $this->json([
-                'status' => true,
-                'data' => $this->eventService->update($id, $eventValidator->validated())
+                'success' => true,
+                'data' => $this->lectureService->update($id, $lectureValidator->validated())
             ]);
         } catch (Exception $exception) {
             return $this->json([
-                'status' => false,
+                'success' => false,
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ]);
@@ -109,12 +109,12 @@ class EventRestController extends AbstractController
     {
         try {
             return $this->json([
-                'status' => true,
+                'success' => true,
                 'data' => true
             ]);
         } catch (Exception $exception) {
             return $this->json([
-                'status' => false,
+                'success' => false,
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ]);

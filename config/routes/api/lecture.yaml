@@ -1,0 +1,24 @@
+index:
+  path: /lecture
+  controller: App\Controller\Api\LectureRestController::index
+  methods:   GET|HEAD
+
+show:
+  path: /lecture/{id}
+  controller: App\Controller\Api\LectureRestController::show
+  methods: GET|HEAD
+
+store:
+  path: /lecture
+  controller: App\Controller\Api\LectureRestController::store
+  methods: POST
+
+update:
+  path: /lecture/{id}
+  controller: App\Controller\Api\LectureRestController::update
+  methods: PUT|PATCH
+
+delete:
+  path: /lecture/{id}
+  controller: App\Controller\Api\LectureRestController::delete
+  methods:  DELETE

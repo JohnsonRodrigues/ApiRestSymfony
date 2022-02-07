@@ -1,7 +1,7 @@
 index:
   path: /event
   controller: App\Controller\Api\EventRestController::index
-  methods:   GET|HEAD
+  methods: GET|HEAD
 
 show:
   path: /event/{id}
